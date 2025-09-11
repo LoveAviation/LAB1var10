@@ -48,13 +48,13 @@ int main(){
     cout << endl;
 
     bool useInt = ((~((int)a | (int)b)) & ((int)a ^ (int)c)) != 0;
-    cout << setprecision(4) << "    X     |    F(X)" << endl;;
+    cout << setprecision(4) << "    X     |    F(X)" << endl;
     for(double i = x0; i <= x; i = i + dx){    
         cout << setw(9) << fixed << i << " | ";
         if (useInt && !isnan(F(i))){
             cout << setw(9) << fixed << F(i) << endl;
         }else if(isnan(F(i))){
-            cout << setw(29) << "Деление на ноль!" << endl;;
+            cout << setw(29) << "Деление на ноль!" << endl;
         }else{
             cout << setw(5) << (int)F(i) << endl;
         }
