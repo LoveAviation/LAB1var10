@@ -5,10 +5,10 @@
 using namespace std;
 
 double a, b, c, x0, x, dx;
-float eps = 0.00001;
+double eps = 0.00001;
 
 double F(double i){
-    if( i < 3 && fabs(b) > eps){
+    if(i < 3){
         return a*i*i - b*i + c;
     }else if (i > 3 && fabs(b) < eps){
         if(fabs(i - c) > eps){
@@ -17,7 +17,7 @@ double F(double i){
             return NAN;
         }
     }else{
-        if(c > eps){
+        if(fabs(c) > eps){
             return i/c;
         }else{
             return NAN;
@@ -45,18 +45,30 @@ int main(){
         cout << "Некорректный ввод!";
         return 0;
     }
+    if(fabs(dx) < eps){
+        cout << "Слишком маленький шаг!";
+        return 0;
+    }
+    if(x < x0 && dx == fabs(dx)){
+        cout << "Начальный Х больше конечного, вычисления не могут быть проведены!";
+        return 0;
+    }
     cout << endl;
 
-    bool useInt = ((~((int)a | (int)b)) & ((int)a ^ (int)c)) != 0;
+    int Ac = static_cast<int>(a);
+    int Bc = static_cast<int>(b);
+    int Cc = static_cast<int>(c);
+    bool useInt = ((~(Ac | Bc)) & (Ac ^ Cc)) != 0;
+    
     cout << setprecision(4) << "    X     |    F(X)" << endl;
-    for(double i = x0; i <= x; i = i + dx){    
+    for(double i = x0; dx > 0 ? i <= x : i >= x; i = i + dx){    
         cout << setw(9) << fixed << i << " | ";
-        if (useInt && !isnan(F(i))){
-            cout << setw(9) << fixed << F(i) << endl;
-        }else if(isnan(F(i))){
+         if(isnan(F(i))){
             cout << setw(29) << "Деление на ноль!" << endl;
+        }else if (useInt){
+            cout << setw(9) << fixed << F(i) << endl;
         }else{
-            cout << setw(5) << (int)F(i) << endl;
+            cout << setw(5) << static_cast<int>(F(i)) << endl;
         }
     }
 }
